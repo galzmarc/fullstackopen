@@ -1,17 +1,18 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import CreateBlog from './components/CreateBlog'
+import Toggle from './components/Toggle'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [successMessage, setSuccessMessage] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
+
+  const blogFormRef = useRef()
 
   useEffect(() => {
     const fecthBlogs = async () => {
@@ -34,8 +35,7 @@ const App = () => {
     }
   }, [])
 
-  const handleLogin = async (event) => {
-    event.preventDefault()
+  const handleLogin = async ({username, password}) => {
     try {
       const user = await loginService.login({
         username,
@@ -43,11 +43,9 @@ const App = () => {
       })
       window.localStorage.setItem('user', JSON.stringify(user))
       setUser(user)
-      setUsername('')
-      setPassword('')
     } catch (error) {
       console.log(error)
-      setErrorMessage('Wrong credentials')
+      setErrorMessage('Wrong username or password')
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
@@ -65,6 +63,7 @@ const App = () => {
   }
 
   const handleCreateBlog = async (blog) => {
+    blogFormRef.current.toggleVisibility()
     try {
       const createdBlog = await blogService.createOne(blog)
       setSuccessMessage(`A new blog ${createdBlog.title} by ${createdBlog.author} added!`)
@@ -84,13 +83,7 @@ const App = () => {
         {errorMessage &&
           <p style={{color: 'red'}}>{errorMessage}</p>
         }
-        <LoginForm 
-          handleLogin={handleLogin} 
-          username={username} 
-          setUsername={setUsername}
-          password={password} 
-          setPassword={setPassword}
-        />
+        <LoginForm handleLogin={handleLogin} />
       </>
     )
   }
@@ -101,10 +94,10 @@ const App = () => {
       {successMessage && 
         <p style={{color: 'green'}}>{successMessage}</p>
       }
-      <div>
-        <p>{user.name} logged in<button onClick={handleLogout}>log out</button></p>
+      <p>{user.name} logged in<button onClick={handleLogout}>log out</button></p>
+      <Toggle buttonLabel='create new blog' ref={blogFormRef} >
         <CreateBlog handleCreateBlog={handleCreateBlog} />
-      </div>
+      </Toggle>
       <div>
         {blogs.map(blog =>
           <Blog key={blog.id} blog={blog} />

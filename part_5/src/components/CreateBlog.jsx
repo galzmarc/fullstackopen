@@ -15,7 +15,7 @@ const CreateBlog = ({handleCreateBlog}) => {
 
   return (
     <div>
-      <h2>create new</h2>
+      <h2>create a new blog</h2>
       <form onSubmit={onSubmit}>
         <div>
           title <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
