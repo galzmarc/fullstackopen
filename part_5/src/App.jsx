@@ -3,7 +3,6 @@ import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import CreateBlog from './components/CreateBlog'
 import Toggle from './components/Toggle'
-import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -77,6 +76,16 @@ const App = () => {
     }
   }
 
+  const handleLike = async (blog) => {
+    try {
+      const updatedBlog = {...blog, likes: blog.likes + 1}
+      const returnedBlog = await blogService.updateOne(updatedBlog)
+      setBlogs(blogs.map(b => (b.id === returnedBlog.id ? returnedBlog : b)))
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   if (user === null) {
     return (
       <>
@@ -101,7 +110,7 @@ const App = () => {
       </Toggle>
       <div>
         {blogs.map(blog => 
-          <Blog key={blog.id} blog={blog} />
+          <Blog key={blog.id} blog={blog} handleLike={handleLike} />
         )}
       </div>
     </>
