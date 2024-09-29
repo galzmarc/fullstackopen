@@ -87,6 +87,15 @@ const App = () => {
     }
   }
 
+  const handleDelete = async (blog) => {
+    try {
+      await blogService.deleteOne(blog)
+      setBlogs(blogs.filter(b => b.id !== blog.id));
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   if (user === null) {
     return (
       <>
@@ -111,7 +120,7 @@ const App = () => {
       </Toggle>
       <div>
         {blogs.map(blog => 
-          <Blog key={blog.id} blog={blog} handleLike={handleLike} />
+          <Blog key={blog.id} blog={blog} handleLike={handleLike} handleDelete={handleDelete} />
         )}
       </div>
     </>
