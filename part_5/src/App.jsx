@@ -3,6 +3,7 @@ import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import CreateBlog from './components/CreateBlog'
 import Toggle from './components/Toggle'
+import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -99,7 +100,7 @@ const App = () => {
         <CreateBlog handleCreateBlog={handleCreateBlog} />
       </Toggle>
       <div>
-        {blogs.map(blog =>
+        {blogs.map(blog => 
           <Blog key={blog.id} blog={blog} />
         )}
       </div>
