@@ -1,6 +1,6 @@
-import { useState } from "react"
+import { useState } from 'react'
 
-const CreateBlog = ({handleCreateBlog}) => {
+const CreateBlog = ({ handleCreateBlog }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')

@@ -1,4 +1,5 @@
 import { useState, forwardRef, useImperativeHandle } from 'react'
+import PropTypes from 'prop-types'
 
 const Toggle = forwardRef((props, refs) => {
   const [visible, setVisible] = useState(false)
@@ -28,5 +29,11 @@ const Toggle = forwardRef((props, refs) => {
     </div>
   )
 })
+
+Toggle.propTypes = {
+  buttonLabel: PropTypes.string.isRequired
+}
+
+Toggle.displayName = 'Toggle'
 
 export default Toggle

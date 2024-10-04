@@ -42,7 +42,7 @@ const Blog = ({ blog, handleLike, handleDelete }) => {
         <p>{blog.user.name}</p>
         <button onClick={deleteBlog}>Delete</button>
       </div>}
-    </div> 
+    </div>
   )
 }
 export default Blog

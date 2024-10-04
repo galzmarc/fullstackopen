@@ -36,7 +36,7 @@ const App = () => {
     }
   }, [])
 
-  const handleLogin = async ({username, password}) => {
+  const handleLogin = async ({ username, password }) => {
     try {
       const user = await loginService.login({
         username,
@@ -71,7 +71,7 @@ const App = () => {
       setTimeout(() => {
         setSuccessMessage(null)
       }, 5000)
-      setBlogs([...blogs, createdBlog]);
+      setBlogs([...blogs, createdBlog])
     } catch (error) {
       console.log(error)
     }
@@ -79,7 +79,7 @@ const App = () => {
 
   const handleLike = async (blog) => {
     try {
-      const updatedBlog = {...blog, likes: blog.likes + 1}
+      const updatedBlog = { ...blog, likes: blog.likes + 1 }
       const returnedBlog = await blogService.updateOne(updatedBlog)
       setBlogs(blogs.map(b => (b.id === returnedBlog.id ? returnedBlog : b)))
     } catch (error) {
@@ -88,11 +88,13 @@ const App = () => {
   }
 
   const handleDelete = async (blog) => {
-    try {
-      await blogService.deleteOne(blog)
-      setBlogs(blogs.filter(b => b.id !== blog.id));
-    } catch (error) {
-      console.log(error)
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
+      try {
+        await blogService.deleteOne(blog)
+        setBlogs(blogs.filter(b => b.id !== blog.id))
+      } catch (error) {
+        console.log(error)
+      }
     }
   }
 
@@ -101,25 +103,25 @@ const App = () => {
       <>
         <h2>Log in to application</h2>
         {errorMessage &&
-          <p style={{color: 'red'}}>{errorMessage}</p>
+          <p style={{ color: 'red' }}>{errorMessage}</p>
         }
         <LoginForm handleLogin={handleLogin} />
       </>
     )
   }
-  
+
   return (
     <>
       <h2>blogs</h2>
-      {successMessage && 
-        <p style={{color: 'green'}}>{successMessage}</p>
+      {successMessage &&
+        <p style={{ color: 'green' }}>{successMessage}</p>
       }
       <p>{user.name} logged in<button onClick={handleLogout}>log out</button></p>
       <Toggle buttonLabel='create new blog' ref={blogFormRef} >
         <CreateBlog handleCreateBlog={handleCreateBlog} />
       </Toggle>
       <div>
-        {blogs.map(blog => 
+        {blogs.map(blog =>
           <Blog key={blog.id} blog={blog} handleLike={handleLike} handleDelete={handleDelete} />
         )}
       </div>
