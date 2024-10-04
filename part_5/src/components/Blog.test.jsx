@@ -1,6 +1,3 @@
-// Make a test, which checks that the blog's URL and number of likes are shown
-// when the button controlling the shown details has been clicked.
-
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import Blog from './Blog'
@@ -40,7 +37,6 @@ test('renders blog URL and likes when the "View" button is clicked', async () =>
     }
   }
 
-  // Render the Blog component
   render(<Blog blog={blog} />)
 
   // Simulate clicking the "View" button using userEvent
@@ -51,4 +47,34 @@ test('renders blog URL and likes when the "View" button is clicked', async () =>
   const detailsElement = screen.getByTestId('blog-details')
   expect(detailsElement).toHaveTextContent('https://example.com')
   expect(detailsElement).toHaveTextContent('Likes: 10')
+})
+
+test('if the like button is clicked twice, the event handler is called twice', async () => {
+  const blog = {
+    title: 'Go To Statement Considered Harmful',
+    author: 'Edsger Dijkstra',
+    url: 'https://example.com',
+    likes: 10,
+    user: {
+      name: 'Test User'
+    }
+  }
+
+  const mockHandler = vi.fn()
+
+  render(<Blog blog={blog} handleLike={mockHandler} />)
+
+  const user = userEvent.setup()
+
+  // First click the "View" button to reveal the Like button
+  const viewButton = screen.getByText('View')
+  await user.click(viewButton)
+
+  // Now the Like button should be visible, click it twice
+  const likeButton = screen.getByText('Like')
+  await user.click(likeButton)
+  await user.click(likeButton)
+
+  // Check that the handler was called twice
+  expect(mockHandler.mock.calls).toHaveLength(2)
 })
