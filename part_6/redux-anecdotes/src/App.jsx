@@ -17,7 +17,7 @@ const App = () => {
     dispatch(createAnecdote(content))
   }
 
-  // Anecdotes are ordered by the number of votes.
+  // Anecdotes are ordered by the number of votes
   const sortedAnecdotes = [...anecdotes].sort((a, b) => b.votes - a.votes);
 
   return (
