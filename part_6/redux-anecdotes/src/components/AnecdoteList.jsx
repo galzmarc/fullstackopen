@@ -14,7 +14,7 @@ const AnecdoteList = () => {
   }
 
   // Anecdotes are ordered by the number of votes
-  const sortedAnecdotes = [...anecdotes].sort((a, b) => b.votes - a.votes);
+  const sortedAnecdotes = [...anecdotes].sort((a, b) => b.votes - a.votes)
   
   return (
     <>

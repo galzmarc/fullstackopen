@@ -46,15 +46,10 @@ export const handleVote = (id) => {
   }
 }
 
-export const createAnecdote = (content) => {
-  return (dispatch) => {
-    const newAnecdoteObj = {
-      content,
-      id: getId(),
-      votes: 0,
-    }
+export const createAnecdote = (newAnecdoteObj) => {
+  return async (dispatch) => {
     dispatch(newAnecdote(newAnecdoteObj))
-    dispatch(setTimedNotification(`You created a new anecdote: "${content}"`, 5))
+    dispatch(setTimedNotification(`You created a new anecdote: "${newAnecdoteObj.content}"`, 5))
   }
 }
 
