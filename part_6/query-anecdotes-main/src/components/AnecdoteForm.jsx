@@ -1,8 +1,12 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createAnecdote } from '../requests';
 
+import { useContext } from 'react'
+import NotificationContext from './NotificationContext'
 
 const AnecdoteForm = () => {
+
+  const [notification, dispatch] = useContext(NotificationContext)
 
   const queryClient = useQueryClient()
 
@@ -11,6 +15,12 @@ const AnecdoteForm = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['anecdotes'] })
     },
+    onError: (error) => {
+      dispatch({ type: 'SET', payload: error.message })
+      setTimeout(() => {
+        dispatch({ type: 'CLEAR' })
+      }, 5000)
+    }
   })
 
   const onCreate = (event) => {
